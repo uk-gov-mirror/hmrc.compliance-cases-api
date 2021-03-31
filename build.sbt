@@ -7,6 +7,7 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "compliance-cases-api"
 
+
 scalaVersion := "2.12.11"
 majorVersion := 0
 PlayKeys.playDefaultPort := 7052
