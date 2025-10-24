@@ -1,5 +1,6 @@
 import play.sbt.PlayScala
 import scoverage.ScoverageKeys
+import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 
 val appName = "compliance-cases-api"
 
@@ -19,6 +20,8 @@ ScoverageKeys.coverageExcludedPackages := Seq("<empty>","Reverse.*",".*Routes.*"
 ScoverageKeys.coverageMinimumStmtTotal := 91
 ScoverageKeys.coverageFailOnMinimum := true
 ScoverageKeys.coverageHighlighting := true
+
+integrationTestSettings()
 
 enablePlugins(PlayScala, SbtDistributablesPlugin)
 disablePlugins(JUnitXmlReportPlugin)
