@@ -22,7 +22,6 @@ ScoverageKeys.coverageFailOnMinimum := true
 ScoverageKeys.coverageHighlighting := true
 
 integrationTestSettings()
-resolvers += Resolver.jcenterRepo
 
 enablePlugins(PlayScala, SbtDistributablesPlugin)
 disablePlugins(JUnitXmlReportPlugin)
