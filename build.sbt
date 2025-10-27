@@ -12,11 +12,12 @@ ScoverageKeys.coverageMinimumStmtTotal := 91
 ScoverageKeys.coverageFailOnMinimum := true
 ScoverageKeys.coverageHighlighting := true
 
-
-enablePlugins(PlayScala, SbtDistributablesPlugin)
-disablePlugins(JUnitXmlReportPlugin)
+javaOptions ++= Seq(
+  "-Dpolyglot.js.nashorn-compat=true"
+)
 
 lazy val microservice = Project(appName, file("."))
+  .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
     libraryDependencies ++= AppDependencies.all,
@@ -32,11 +33,11 @@ lazy val microservice = Project(appName, file("."))
   .settings(PlayKeys.playDefaultPort := 7052)
 addCommandAlias("testAll", "; test ; it/test")
 
-
-
 lazy val it = (project in file("it"))
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "compile->compile,test;test->compile,test")
   .settings(DefaultBuildSettings.itSettings())
-  .settings(libraryDependencies ++= AppDependencies.test)
-  .settings( Test / scalaSource := baseDirectory.value / "test" / "scala")
+  .settings(libraryDependencies ++= AppDependencies.test,
+    Test    / scalacOptions --= Seq("-deprecation","-unchecked","-encoding","UTF-8")
+  )
+  .settings( Test / scalaSource := baseDirectory.value / "scala")
