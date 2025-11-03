@@ -44,19 +44,19 @@ trait MockHelpers extends MockitoSugar {
 
   object Given extends MockPredicate()
 
-  private[helpers] case class ConfigPredicate(private val stubs: Seq[() => OngoingStubbing[_]]) extends MockPredicate(stubs) {
+  private[helpers] case class ConfigPredicate(private val stubs: Seq[() => OngoingStubbing[?]]) extends MockPredicate(stubs) {
     def getsConfigAt[A](address: String, configValue: A): ConfigPredicate = copy(
       stubs = stubs :+ (() => when(mockConfig.get[A](ArgumentMatchers.eq(address))(ArgumentMatchers.any())).thenReturn(configValue))
     )
   }
 
-  private[helpers] case class ResourceServicePredicate(private val stubs: Seq[() => OngoingStubbing[_]]) extends MockPredicate(stubs) {
+  private[helpers] case class ResourceServicePredicate(private val stubs: Seq[() => OngoingStubbing[?]]) extends MockPredicate(stubs) {
     def returnsResourceAt(address: String, resourceAsString: String): ResourceServicePredicate = copy(
       stubs = stubs :+ (() => when(mockResourceService.getFile(ArgumentMatchers.eq(address))).thenReturn(resourceAsString))
     )
   }
 
-  private[helpers] case class ComplianceCasesServicePredicate(private val stubs: Seq[() => OngoingStubbing[_]]) extends MockPredicate(stubs) {
+  private[helpers] case class ComplianceCasesServicePredicate(private val stubs: Seq[() => OngoingStubbing[?]]) extends MockPredicate(stubs) {
     def createsCase(input: JsValue, correlationId: String, httpResponse: Option[HttpResponse]): ComplianceCasesServicePredicate = copy(
       stubs = stubs :+ (() =>
         when(
@@ -68,7 +68,7 @@ trait MockHelpers extends MockitoSugar {
     )
   }
 
-  private[helpers] case class ComplianceCasesConnectorPredicate(private val stubs: Seq[() => OngoingStubbing[_]]) extends MockPredicate(stubs) {
+  private[helpers] case class ComplianceCasesConnectorPredicate(private val stubs: Seq[() => OngoingStubbing[?]]) extends MockPredicate(stubs) {
     def createsCase(input: JsValue, correlationId: String, httpResponse: Option[HttpResponse]): ComplianceCasesConnectorPredicate = copy(
       stubs = stubs :+ (() => when(
         mockComplianceCasesConnector.createCase(
@@ -79,7 +79,7 @@ trait MockHelpers extends MockitoSugar {
     )
   }
 
-  private[helpers] case class ValidationServicePredicate(private val stubs: Seq[() => OngoingStubbing[_]]) extends MockPredicate(stubs) {
+  private[helpers] case class ValidationServicePredicate(private val stubs: Seq[() => OngoingStubbing[?]]) extends MockPredicate(stubs) {
     def validate(schema: String, json: JsValue, expectedOutcome: Option[JsValue]): ValidationServicePredicate = copy(
       stubs = stubs :+ (() => when(
         mockValidationService.validateAndRetrieveErrors(
@@ -89,7 +89,7 @@ trait MockHelpers extends MockitoSugar {
     )
   }
 
-  private[helpers] case class AuthConnectorPredicate(private val stubs: Seq[() => OngoingStubbing[_]]) extends MockPredicate(stubs) {
+  private[helpers] case class AuthConnectorPredicate(private val stubs: Seq[() => OngoingStubbing[?]]) extends MockPredicate(stubs) {
     def authenticatesWithResult[A](predicate: Predicate, retrieval: Retrieval[A], expectedOutcome: Future[A]): AuthConnectorPredicate =
       copy(
         stubs = stubs :+ (() => when(
@@ -101,7 +101,7 @@ trait MockHelpers extends MockitoSugar {
       )
   }
 
-  abstract class MockPredicate(private val stubs: Seq[() => OngoingStubbing[_]] = Seq()) {
+  abstract class MockPredicate(private val stubs: Seq[() => OngoingStubbing[?]] = Seq()) {
     def build(): Unit = stubs.foreach(_.apply())
 
     def and: MockPredicate = this
